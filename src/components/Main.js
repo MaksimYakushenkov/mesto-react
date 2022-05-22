@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import avatarEditButton from '../images/avatar_edit-button.svg';
 import progileAddButton from '../images/profile__add-button.svg';
-import PopupWithForm from './PopupWithForm';
-import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import Card from './Card';
 
@@ -54,70 +52,11 @@ function Main(props) {
           <img src={progileAddButton} alt="Добавить картинку" className="profile__button-image" onClick={props.onAddPlace}/>
         </button>
       </div>
-        
+      
+      {/* Для атрибута key использован id каждой карточки, взятой из ответа запроса API (функция-сетер setCards). Затем здесь мы используем деструктуризацию (берем  id из массива карточек, заданных заранее, и напрямую задаем каждой карточке свой id и передаем другие пропсы). */}
       <div className="elements">
-        {cards.map(({ id, ...card }) => <Card key={id} {...card} onCardClick={props.handleCardClick}/>)}
-      </div>
-
-      {<PopupWithForm
-      popupName="profile-popup"
-      title="Редактировать профиль"
-      isOpen={props.isEditProfilePopupOpen}
-      onClose={props.closeAllPopups}
-      children={
-        <Fragment>
-          <input type="text" className="popup__input" id="name" minLength="2" maxLength="40" placeholder="Имя" required/>
-          <span className="name-error popup__error"></span>
-          <input type="text" className="popup__input" id="about" minLength="2" maxLength="200" placeholder="Профессиональная деятельность" required/>
-          <span className="about-error popup__error"></span>
-          <button type="submit" className="popup__button">Сохранить</button>
-        </Fragment>
-      }/>}
-
-      {<PopupWithForm
-      popupName="place-popup"
-      title="Новое место"
-      isOpen={props.isAddPlacePopupOpen}
-      onClose={props.closeAllPopups}
-      children={
-        <Fragment>
-          <input type="text" className="popup__input" id="namePlace" minLength="2" maxLength="30" placeholder="Название" required/>
-          <span className="namePlace-error popup__error"></span>
-          <input type="url" className="popup__input" id="linkImage" placeholder="Ссылка на картинку" required/>
-          <span className="linkImage-error popup__error"></span>
-          <button type="submit" className="popup__button">Сохранить</button>
-        </Fragment>
-      }/>}
-
-      {<PopupWithForm
-      popupName="avatar-popup"
-      title="Обновить аватар"
-      isOpen={props.isEditAvatarPopupOpen}
-      onClose={props.closeAllPopups}
-      children={
-        <Fragment>
-          <input type="url" className="popup__input" id="linkAvatarImage" placeholder="Ссылка на картинку" required/>
-          <span className="linkAvatarImage-error popup__error"></span>
-          <button type="submit" className="popup__button">Сохранить</button>
-        </Fragment>
-      }/>}
-
-      {<PopupWithForm
-      popupName="delete-popup"
-      title="Вы уверены?"
-      isOpen={false}
-      onClose={props.closeAllPopups}
-      children={
-        <Fragment>
-          <button className="popup__button popup__confirm-delete">Да</button>
-        </Fragment>
-      }/>}
-
-      {<ImagePopup 
-      card={props.selectedCard}
-      onClose={props.closeAllPopups}
-      />}
-        
+        {cards.map(({ id, ...card }) => (<Card key={id} {...card} onCardClick={props.handleCardClick}/>))}
+      </div>       
     </main>
   );
 }
