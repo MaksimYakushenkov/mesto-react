@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import avatarEditButton from '../images/avatar_edit-button.svg';
 import progileAddButton from '../images/profile__add-button.svg';
-import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Card from './Card';
 

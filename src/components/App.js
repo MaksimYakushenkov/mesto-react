@@ -11,6 +11,8 @@ import ImagePopup from './ImagePopup';
 import Footer from './Footer';
 
 function App() {
+
+  //Необходимые для рбаоты приложение стейты
   const [cards, setCards] = React.useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen]  = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen]  = React.useState(false);
@@ -18,6 +20,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
 
+  //Эффект создания списка карточек через API
   React.useEffect(() => {
     api.getInitialCards()
     .then(data => {
@@ -28,6 +31,18 @@ function App() {
     });
   }, []);
 
+  //Эффект получения инфо о пользователе
+  React.useEffect(() => {
+    api.getUserInfo()
+    .then(data => {
+      setCurrentUser(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
+  //Функция добавления карточки
   function handleAddPlaceSubmit(addPlaceValues) {
     api.setNewCard(addPlaceValues)
     .then(data => {
@@ -39,6 +54,7 @@ function App() {
     });
   }
 
+  //Функция лайка карточки
   function handleCardLike(card) {
 
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -51,6 +67,7 @@ function App() {
     });
   }
 
+  //Функция удаления карточки
   function handleCardDelete(card) {
     api.deleteUserCard(card._id)
     .then((
@@ -60,16 +77,31 @@ function App() {
     ));
   }
 
-  React.useEffect(() => {
-    api.getUserInfo()
+  //Функция обновления данных о пользователе
+  function handleUpdateUser(values) {
+    api.setNewUserInfo(values)
     .then(data => {
       setCurrentUser(data);
+      closeAllPopups();
     })
     .catch((err) => {
       console.log(err);
     });
-  }, []);
+  }
 
+  //Функция обновление аватара пользователя
+  function handleUpdateAvatar(value) {
+    api.setNewUserAvatar(value)
+    .then(data => {
+      setCurrentUser(data);
+      closeAllPopups();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  //Обработчики попапов
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   }
@@ -82,6 +114,7 @@ function App() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   }
 
+  //Функция закрытия всех попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -89,30 +122,9 @@ function App() {
     setSelectedCard({});
   }
 
+  //Передаем выбранную карточку в попап с картинкой
   function handleCardClick(selectedCard) {
     setSelectedCard(selectedCard);
-  }
-
-  function handleUpdateUser(values) {
-    api.setNewUserInfo(values)
-    .then(data => {
-      setCurrentUser(data);
-      closeAllPopups();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-
-  function handleUpdateAvatar(value) {
-    api.setNewUserAvatar(value)
-    .then(data => {
-      setCurrentUser(data);
-      closeAllPopups();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   }
 
   return (
@@ -138,21 +150,21 @@ function App() {
           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
 
 
-        {<PopupWithForm
-          popupName="delete-popup"
-          title="Вы уверены?"
-          buttonText="Да"
-          isOpen={false}
-          onClose={closeAllPopups}>
-            <button className="popup__button popup__confirm-delete">Да</button>
-        </PopupWithForm>}
+          {<PopupWithForm
+            popupName="delete-popup"
+            title="Вы уверены?"
+            buttonText="Да"
+            isOpen={false}
+            onClose={closeAllPopups}>
+              <button className="popup__button popup__confirm-delete">Да</button>
+          </PopupWithForm>}
 
-        {<ImagePopup 
-        card={selectedCard}
-        onClose={closeAllPopups}
-        />}
+          {<ImagePopup 
+          card={selectedCard}
+          onClose={closeAllPopups}
+          />}
 
-        {<Footer />}
+          {<Footer />}
         </div>
       </div>
     </CurrentUserContext.Provider>
