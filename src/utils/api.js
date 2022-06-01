@@ -25,8 +25,8 @@ class Api {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        name: newdata.name,
-        link: newdata.link
+        name: newdata.namePlace,
+        link: newdata.linkPlace
       })
     })
     .then(res => {
@@ -44,25 +44,26 @@ class Api {
     })
   }
 
-  deleteCardLike(idCard) {
-    return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
-      method: 'DELETE',
-      headers: this._headers
-    })
-    .then(res => {
-     return this._getResponseData(res);
-    })
+  changeLikeCardStatus(idCard, isLiked) {
+    if(isLiked) {
+      return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
+        method: 'PUT',
+        headers: this._headers
+      })
+      .then(res => {
+       return this._getResponseData(res);
+      })
+    } else {
+      return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
+        method: 'DELETE',
+        headers: this._headers
+      })
+      .then(res => {
+       return this._getResponseData(res);
+      })
+    }
   }
 
-  putCardLike(idCard) {
-    return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
-      method: 'PUT',
-      headers: this._headers
-    })
-    .then(res => {
-     return this._getResponseData(res);
-    })
-  }
 
   getUserInfo() {
    return fetch(`${this._baseUrl}users/me`, {
@@ -77,7 +78,7 @@ class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: newAvatarLink.linkAvatarImage})
+        avatar: newAvatarLink})
     })
     .then(res => {
      return this._getResponseData(res);
