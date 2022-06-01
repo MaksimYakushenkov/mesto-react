@@ -3,13 +3,17 @@ import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup(props) {
   // Подписка на контекст
-  const inputRef = React.useRef('');
+  const inputRef = React.useRef(null);
+
+  // После закрытия попапа очищаем поле
+  React.useEffect(() => {
+    inputRef.current.value = '';
+  }, [props.isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();
-  
     props.onUpdateAvatar(inputRef.current.value);
-  } 
+  }
 
   return (
     <PopupWithForm

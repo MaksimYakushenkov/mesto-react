@@ -3,8 +3,8 @@ import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup(props) {
 
-  const [namePlace, setNamePlace] = React.useState();
-  const [linkPlace, setLinkPlace] = React.useState();
+  const [namePlace, setNamePlace] = React.useState('');
+  const [linkPlace, setLinkPlace] = React.useState('');
 
   function handlePlaceNameChange(e) {
     setNamePlace(e.target.value);
@@ -24,6 +24,12 @@ function AddPlacePopup(props) {
       linkPlace,
     });
   }
+
+  // После закрытия попапа очищаем поля
+  React.useEffect(() => {
+    setNamePlace('');
+    setLinkPlace('');
+  }, [props.isOpen]);
 
   return (
     <PopupWithForm
